@@ -47,7 +47,7 @@ Write and publish a blog post about the latest AI coding tools:
 ```bash
 ghost-admin posts list --limit 10 --include tags,authors
 ghost-admin posts get <id-or-slug>
-ghost-admin posts create --title "My Post" --content "<p>Hello World</p>" --status published
+ghost-admin posts create --title "My Post" --content "**Hello World** in Markdown" --status published
 ghost-admin posts update <id> --title "Updated Title" --slug 2024-01-15-new-slug
 ghost-admin posts delete <id>
 ```
@@ -57,7 +57,7 @@ ghost-admin posts delete <id>
 ```bash
 ghost-admin pages list
 ghost-admin pages get <id-or-slug>
-ghost-admin pages create --title "My Page" --content "<p>Content</p>"
+ghost-admin pages create --title "My Page" --content "Page **content** in Markdown"
 ghost-admin pages update <id> --title "Updated Title"
 ghost-admin pages delete <id>
 ```

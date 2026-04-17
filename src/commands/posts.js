@@ -1,5 +1,6 @@
 import { Command } from 'commander';
 import { createClient } from '../lib/api.js';
+import { ensureHtml } from '../lib/markdown.js';
 import ora from 'ora';
 import fs from 'fs';
 import path from 'path';
@@ -77,7 +78,7 @@ postsCommand
       };
 
       if (options.content) {
-        postData.html = options.content;
+        postData.html = ensureHtml(options.content);
       }
       if (options.slug) {
         postData.slug = options.slug;
@@ -109,7 +110,7 @@ postsCommand
     try {
       const postData = {};
       if (options.title) postData.title = options.title;
-      if (options.content) postData.html = options.content;
+      if (options.content) postData.html = ensureHtml(options.content);
       if (options.status) postData.status = options.status;
       if (options.slug) postData.slug = options.slug;
 

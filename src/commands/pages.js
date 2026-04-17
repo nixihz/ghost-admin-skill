@@ -1,5 +1,6 @@
 import { Command } from 'commander';
 import { createClient } from '../lib/api.js';
+import { ensureHtml } from '../lib/markdown.js';
 import ora from 'ora';
 import fs from 'fs';
 import path from 'path';
@@ -69,7 +70,7 @@ pagesCommand
       };
 
       if (options.content) {
-        pageData.html = options.content;
+        pageData.html = ensureHtml(options.content);
       }
       if (options.slug) {
         pageData.slug = options.slug;
@@ -97,7 +98,7 @@ pagesCommand
     try {
       const pageData = {};
       if (options.title) pageData.title = options.title;
-      if (options.content) pageData.html = options.content;
+      if (options.content) pageData.html = ensureHtml(options.content);
       if (options.slug) pageData.slug = options.slug;
 
       const result = await client.updatePage(id, pageData);

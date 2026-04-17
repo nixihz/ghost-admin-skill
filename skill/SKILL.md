@@ -165,14 +165,14 @@ ghost-admin auth --key <api-key> --domain <ghost-admin-domain>
 # Posts
 ghost-admin posts list [--limit 15] [--page 1] [--include tags,authors]
 ghost-admin posts get <id>
-ghost-admin posts create --title "Title" --content "<html>" [--status draft]
+ghost-admin posts create --title "Title" --content "**Markdown** content here" [--status draft]
 ghost-admin posts update <id> --title "New Title"
 ghost-admin posts delete <id>
 
 # Pages
 ghost-admin pages list [--limit 15]
 ghost-admin pages get <id>
-ghost-admin pages create --title "Title" --content "<html>"
+ghost-admin pages create --title "Title" --content "**Markdown** content here"
 ghost-admin pages delete <id>
 
 # Images
@@ -227,7 +227,9 @@ YYYY-MM-DD-descriptive-english-title
 
 ### Content Creation Workflow
 
-1. Write content in Markdown
+**IMPORTANT**: Always use Markdown as input format for content. Ghost supports markdown natively and will handle conversion automatically.
+
+1. Write content in Markdown format
 2. Use Ghost's markdown card format (NOT HTML card):
 ```javascript
 const mobiledoc = JSON.stringify({
