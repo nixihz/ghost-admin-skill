@@ -34,14 +34,14 @@ pagesCommand
 pagesCommand
   .command('get')
   .description('Get a single page by ID or slug')
-  .argument('<id>', 'Page ID or slug')
+  .argument('<id>', 'Page ID, UUID, or slug')
   .action(async (id) => {
     const client = getClient();
     const spinner = ora('Fetching page...').start();
 
     try {
       let result;
-      if (id.includes('-')) {
+      if (looksLikeGhostId(id) || looksLikeUuid(id)) {
         result = await client.getPage(id);
       } else {
         result = await client.getPageBySlug(id);
@@ -87,7 +87,7 @@ pagesCommand
 pagesCommand
   .command('update')
   .description('Update an existing page')
-  .argument('<id>', 'Page ID')
+  .argument('<id>', 'Page ID or slug')
   .option('-t, --title <title>', 'Page title')
   .option('-c, --content <html>', 'Page content (HTML)')
   .option('-s, --slug <slug>', 'Page slug')
@@ -101,7 +101,8 @@ pagesCommand
       if (options.content) pageData.html = ensureHtml(options.content);
       if (options.slug) pageData.slug = options.slug;
 
-      const result = await client.updatePage(id, pageData);
+      const resolvedId = await resolvePageId(id, client);
+      const result = await client.updatePage(resolvedId, pageData);
       spinner.succeed();
       console.log(JSON.stringify(result, null, 2));
     } catch (error) {
@@ -112,13 +113,14 @@ pagesCommand
 pagesCommand
   .command('delete')
   .description('Delete a page')
-  .argument('<id>', 'Page ID')
+  .argument('<id>', 'Page ID, UUID, or slug')
   .action(async (id) => {
     const client = getClient();
     const spinner = ora('Deleting page...').start();
 
     try {
-      await client.deletePage(id);
+      const resolvedId = await resolvePageId(id, client);
+      await client.deletePage(resolvedId);
       spinner.succeed('Page deleted successfully');
     } catch (error) {
       spinner.fail(error.message);
@@ -142,4 +144,32 @@ function loadConfig() {
     return JSON.parse(fs.readFileSync(configPath, 'utf-8'));
   }
   return {};
+}
+
+// Ghost internal ID: 24-char hex string
+const GHOST_ID_REGEX = /^[0-9a-f]{24}$/i;
+
+// Proper UUID regex: 8-4-4-4-12 hex characters with dashes
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+function looksLikeUuid(id) {
+  return UUID_REGEX.test(id);
+}
+
+function looksLikeGhostId(id) {
+  return GHOST_ID_REGEX.test(id);
+}
+
+async function resolvePageId(id, client) {
+  if (looksLikeGhostId(id) || looksLikeUuid(id)) {
+    return id;
+  }
+  if (/^\d+$/.test(id)) {
+    return id;
+  }
+  const result = await client.getPageBySlug(id);
+  if (!result.pages || result.pages.length === 0) {
+    throw new Error(`Page not found: ${id}`);
+  }
+  return result.pages[0].id;
 }

@@ -97,7 +97,11 @@ export class GhostAdminClient {
   }
 
   async updatePage(id, data) {
-    return this.request('PUT', `pages/${id}/`, { pages: [data] });
+    // Fetch current page to get updated_at (needed to avoid 409 conflict)
+    const current = await this.getPage(id);
+    const page = current.pages[0];
+    const updateData = { ...data, updated_at: page.updated_at };
+    return this.request('PUT', `pages/${id}/`, { pages: [updateData] });
   }
 
   async deletePage(id) {

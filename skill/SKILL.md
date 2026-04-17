@@ -164,14 +164,14 @@ ghost-admin auth --key <api-key> --domain <ghost-admin-domain>
 
 # Posts
 ghost-admin posts list [--limit 15] [--page 1] [--include tags,authors]
-ghost-admin posts get <id>
-ghost-admin posts create --title "Title" --content "**Markdown** content here" [--status draft]
-ghost-admin posts update <id> --title "New Title"
+ghost-admin posts get <id-or-slug>
+ghost-admin posts create --title "Title" --content "**Markdown** content here" [--status draft] [--slug YYYY-MM-DD-title]
+ghost-admin posts update <id-or-slug> --title "New Title" [--custom-excerpt "SEO description"] [--tags "AI,Tech,News"]
 ghost-admin posts delete <id>
 
 # Pages
 ghost-admin pages list [--limit 15]
-ghost-admin pages get <id>
+ghost-admin pages get <id-or-slug>
 ghost-admin pages create --title "Title" --content "**Markdown** content here"
 ghost-admin pages delete <id>
 
@@ -181,6 +181,7 @@ ghost-admin images upload --file <path> [--ref <name>]
 # Tags
 ghost-admin tags list
 ghost-admin tags create --name "Tag Name" --slug "tag-slug"
+ghost-admin tags update <id> --name "New Name"
 ghost-admin tags delete <id>
 
 # Members
@@ -263,3 +264,35 @@ const updated = await client.request('PUT', `posts/${postId}/`, {
   }]
 });
 ```
+
+## SEO Optimization
+
+Ghost 自动生成 `<title>`、Open Graph 和 Twitter Card 标签，但可以通过以下方式优化：
+
+### 1. 自定义摘要（meta description）
+
+```bash
+ghost-admin posts update <id> --custom-excerpt "你的SEO描述内容"
+```
+
+`custom_excerpt` 会映射到：
+- `<meta name="description">`
+- `og:description`（如果未单独设置）
+- 文章列表中的摘要显示
+
+### 2. 文章标签（article:tag）
+
+```bash
+# 添加标签（逗号分隔）
+ghost-admin posts update <id> --tags "AI,Claude,大语言模型"
+```
+
+Ghost 会自动为每个标签创建对应的 `article:tag` Open Graph 标签。
+
+### 3. 精选图片 alt 文字
+
+目前需要通过 Ghost Admin 界面手动设置 `feature_image_alt` 字段。
+
+### 4. JSON-LD 结构化数据
+
+Ghost 主题的 `post.hbs` 模板负责输出 JSON-LD。如需修改 `author.sameAs` 社交链接，在 Ghost Admin > Settings > Staff > Author Profile 中填写。
