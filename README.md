@@ -1,6 +1,6 @@
 # Ghost Admin CLI & Skill
 
-A CLI tool and Claude Code Skill for managing [Ghost](https://ghost.org) — the best open source blog & newsletter platform.
+A CLI tool and Claude Code AI Agent Skill for managing [Ghost](https://ghost.org) — the open source platform for bloggers, newsletter creators, and independent publishers.
 
 **Package name:** `ghost-admin-cli`
 
@@ -109,29 +109,26 @@ ghost-admin status     # Check auth status
 ghost-admin logout     # Logout
 ```
 
-## Skill Triggers
+## When to Use
 
-- User mentions Ghost CMS, Ghost admin, or Ghost API key
-- User needs to manage Ghost posts, pages, images, members, or tiers
-- User needs to publish or manage Ghost blog content
+This skill activates when you:
+- Mention Ghost CMS, Ghost admin, or Ghost API key
+- Need to manage posts, pages, images, members, or tiers
+- Want to publish or manage blog content on Ghost
 
 ## API Coverage
 
-- [x] Posts (CRUD)
-- [x] Pages (CRUD + Copy)
-- [x] Images (Upload)
-- [x] Tags (CRUD)
-- [x] Members (Browse, Read)
-- [x] Site (Read)
-- [x] Tiers (Browse)
-- [x] Newsletters (Browse)
-- [ ] Themes (Upload, Activate)
-- [ ] Webhooks (CRUD)
-- [ ] Users (Browse, Read)
+**Available:**
+- Posts (CRUD), Pages (CRUD + Copy), Images (Upload), Tags (CRUD)
+- Members (Browse, Read), Site (Read), Tiers (Browse), Newsletters (Browse)
+
+**Coming soon:**
+- Themes (Upload, Activate), Webhooks (CRUD), Users (Browse, Read)
 
 ## Development
 
 ```bash
+npm install
 npm run test
 ```
 
