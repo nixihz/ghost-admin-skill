@@ -3,18 +3,34 @@
   "version": "1.1.0",
   "description": "Ghost Admin API CLI tool",
   "main": "src/index.js",
+  "files": [
+    "bin",
+    "src",
+    "skill",
+    "README.md",
+    "docs/README.zh.md"
+  ],
   "bin": {
-    "ghost-admin": "./bin/ghost.js"
+    "ghost-admin": "bin/ghost.js"
   },
   "type": "module",
   "scripts": {
     "test": "node --test"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nixihz/ghost-admin-skill.git"
+  },
+  "homepage": "https://github.com/nixihz/ghost-admin-skill#readme",
+  "bugs": {
+    "url": "https://github.com/nixihz/ghost-admin-skill/issues"
+  },
   "keywords": [
     "ghost",
     "cms",
     "admin",
-    "api"
+    "api",
+    "cli"
   ],
   "author": "",
   "license": "MIT",

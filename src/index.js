@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { Command } from 'commander';
+import { createRequire } from 'node:module';
 import { authCommand, logoutCommand, statusCommand } from './commands/auth.js';
 import { postsCommand } from './commands/posts.js';
 import { pagesCommand } from './commands/pages.js';
@@ -12,11 +13,13 @@ import { tiersCommand } from './commands/tiers.js';
 import { newslettersCommand } from './commands/newsletters.js';
 
 const program = new Command();
+const require = createRequire(import.meta.url);
+const { version } = require('../package.json');
 
 program
   .name('ghost-admin')
   .description('Ghost Admin API CLI tool')
-  .version('1.0.0');
+  .version(version);
 
 // Add commands
 program.addCommand(authCommand);
