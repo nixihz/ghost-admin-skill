@@ -67,11 +67,15 @@ export class GhostAdminClient {
     return this.request('POST', 'posts/', { posts: [data] });
   }
 
-  async updatePost(id, data) {
-    // Fetch current post to get updated_at
-    const current = await this.getPost(id);
-    const post = current.posts[0];
-    const updateData = { ...data, updated_at: post.updated_at };
+  async updatePost(id, data, { updatedAt } = {}) {
+    if (!updatedAt) {
+      const current = await this.getPost(id);
+      if (!current.posts || current.posts.length === 0) {
+        throw new Error(`Post not found: ${id}`);
+      }
+      updatedAt = current.posts[0].updated_at;
+    }
+    const updateData = { ...data, updated_at: updatedAt };
     return this.request('PUT', `posts/${id}/`, { posts: [updateData] });
   }
 
@@ -119,10 +123,21 @@ export class GhostAdminClient {
     const fileBuffer = fs.default.readFileSync(filePath);
     const fileName = filePath.split('/').pop();
 
+    const ext = fileName.split('.').pop().toLowerCase();
+    const mimeTypes = {
+      jpg: 'image/jpeg',
+      jpeg: 'image/jpeg',
+      png: 'image/png',
+      gif: 'image/gif',
+      webp: 'image/webp',
+      svg: 'image/svg+xml'
+    };
+    const contentType = mimeTypes[ext] || 'application/octet-stream';
+
     const form = new formData.default();
     form.append('file', fileBuffer, {
       filename: fileName,
-      contentType: 'image/png'
+      contentType: contentType
     });
     if (ref) {
       form.append('ref', ref);

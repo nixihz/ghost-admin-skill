@@ -1,22 +1,24 @@
 # Ghost Admin CLI & Skill
 
-A CLI tool and AI Agent Skill for managing [Ghost](https://ghost.org) — the open source platform for bloggers, newsletter creators, and independent publishers.
+一个用于管理 [Ghost](https://ghost.org) 的 CLI 工具和 AI Agent Skill —— Ghost 是面向博客作者、 Newsletter 创作者和独立出版者的开源平台。
 
-**Package name:** `ghost-admin-cli`
+**包名：** `ghost-admin-cli`
 
-[中文文档](doc/README.zh.md)
+**English Documentation:** [README.md](../README.md)
 
-## Quick Start
+---
 
-1. Install the skill: `npx skills add nixihz/ghost-admin-skill`
-2. The skill will auto-install the CLI when needed
-3. When asked for API key, get it from Ghost Admin > Settings > Integrations > Admin API
+## 快速开始
 
-## Example Prompts
+1. 安装 Skill：`npx skills add nixihz/ghost-admin-skill`
+2. Skill 会在需要时自动安装 CLI
+3. 当要求提供 API Key 时，从 Ghost Admin > Settings > Integrations > Admin API 获取
 
-Here are example prompts you can use with this skill:
+## 示例提示词
 
-### Create a Post
+以下是你可以配合此 Skill 使用的示例提示词：
+
+### 创建文章
 
 ```
 Write a blog post about Claude Code skill development with:
@@ -26,13 +28,13 @@ Write a blog post about Claude Code skill development with:
 - Set status to draft
 ```
 
-### Publish a Draft
+### 发布草稿
 
 ```
 Publish the latest draft post
 ```
 
-### Write & Publish with AI
+### 使用 AI 撰写并发布
 
 ```
 Write and publish a blog post about the latest AI coding tools:
@@ -42,9 +44,9 @@ Write and publish a blog post about the latest AI coding tools:
 - Publish immediately
 ```
 
-## Usage
+## 使用方式
 
-### Posts
+### 文章 (Posts)
 
 ```bash
 ghost-admin posts list --limit 10 --include tags,authors [--table]
@@ -58,7 +60,7 @@ ghost-admin posts publish <id-or-slug>
 ghost-admin posts search <keyword> [--table]
 ```
 
-### Pages
+### 页面 (Pages)
 
 ```bash
 ghost-admin pages list
@@ -68,13 +70,13 @@ ghost-admin pages update <id> --title "Updated Title"
 ghost-admin pages delete <id>
 ```
 
-### Images
+### 图片 (Images)
 
 ```bash
 ghost-admin images upload --file ./image.png --ref "my-image"
 ```
 
-### Tags
+### 标签 (Tags)
 
 ```bash
 ghost-admin tags list
@@ -83,61 +85,61 @@ ghost-admin tags update <id> --name "Tech" --slug "tech-updated"
 ghost-admin tags delete <id>
 ```
 
-### Members
+### 会员 (Members)
 
 ```bash
 ghost-admin members list --limit 20 --include labels
 ghost-admin members get <id>
 ```
 
-### Site
+### 站点 (Site)
 
 ```bash
 ghost-admin site info
 ```
 
-### Tiers
+### 订阅等级 (Tiers)
 
 ```bash
 ghost-admin tiers list --include monthly_price,benefits
 ```
 
-### Newsletters
+### 邮件订阅 (Newsletters)
 
 ```bash
 ghost-admin newsletters list
 ```
 
-### Other Commands
+### 其他命令
 
 ```bash
-ghost-admin status     # Check auth status
-ghost-admin logout     # Logout
+ghost-admin status     # 检查认证状态
+ghost-admin logout     # 退出登录
 ```
 
-## When to Use
+## 触发条件
 
-This skill activates when you:
-- Mention Ghost CMS, Ghost admin, or Ghost API key
-- Need to manage posts, pages, images, members, or tiers
-- Want to publish or manage blog content on Ghost
+此 Skill 在以下场景激活：
+- 提到 Ghost CMS、Ghost admin 或 Ghost API key
+- 需要管理文章、页面、图片、会员或订阅等级
+- 想要在 Ghost 上发布或管理博客内容
 
-## API Coverage
+## API 覆盖范围
 
-**Available:**
-- Posts (CRUD + Duplicate + Publish + Search), Pages (CRUD + Copy), Images (Upload), Tags (CRUD)
-- Members (Browse, Read), Site (Read), Tiers (Browse), Newsletters (Browse)
+**已支持：**
+- Posts (CRUD + Duplicate + Publish + Search)、Pages (CRUD + Copy)、Images (Upload)、Tags (CRUD)
+- Members (Browse, Read)、Site (Read)、Tiers (Browse)、Newsletters (Browse)
 
-**Coming soon:**
-- Themes (Upload, Activate), Webhooks (CRUD), Users (Browse, Read)
+**即将支持：**
+- Themes (Upload, Activate)、Webhooks (CRUD)、Users (Browse, Read)
 
-## Development
+## 开发
 
 ```bash
 npm install
 npm run test
 ```
 
-## License
+## 许可证
 
 MIT
