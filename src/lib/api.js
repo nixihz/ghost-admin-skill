@@ -1,6 +1,5 @@
 import fetch from 'node-fetch';
 import jwt from 'jsonwebtoken';
-import { getAuthHeader } from './auth.js';
 
 /**
  * Ghost Admin API Client
@@ -40,8 +39,7 @@ export class GhostAdminClient {
     }
 
     const response = await fetch(url.toString(), options);
-    const text = await response.text();
-    const json = text ? JSON.parse(text) : {};
+    const json = await parseJsonResponse(response);
 
     if (!response.ok) {
       throw new Error(`Ghost API error: ${response.status} - ${JSON.stringify(json)}`);
@@ -63,8 +61,8 @@ export class GhostAdminClient {
     return this.request('GET', `posts/slug/${slug}/`, null, params);
   }
 
-  async createPost(data) {
-    return this.request('POST', 'posts/', { posts: [data] });
+  async createPost(data, params = {}) {
+    return this.request('POST', 'posts/', { posts: [data] }, params);
   }
 
   async updatePost(id, data, { updatedAt } = {}) {
@@ -83,6 +81,10 @@ export class GhostAdminClient {
     return this.request('DELETE', `posts/${id}/`);
   }
 
+  async copyPost(id) {
+    return this.request('POST', `posts/${id}/copy/`);
+  }
+
   // Pages
   async getPages(params = {}) {
     return this.request('GET', 'pages/', null, params);
@@ -96,16 +98,16 @@ export class GhostAdminClient {
     return this.request('GET', `pages/slug/${slug}/`, null, params);
   }
 
-  async createPage(data) {
-    return this.request('POST', 'pages/', { pages: [data] });
+  async createPage(data, params = {}) {
+    return this.request('POST', 'pages/', { pages: [data] }, params);
   }
 
-  async updatePage(id, data) {
+  async updatePage(id, data, params = {}) {
     // Fetch current page to get updated_at (needed to avoid 409 conflict)
     const current = await this.getPage(id);
     const page = current.pages[0];
     const updateData = { ...data, updated_at: page.updated_at };
-    return this.request('PUT', `pages/${id}/`, { pages: [updateData] });
+    return this.request('PUT', `pages/${id}/`, { pages: [updateData] }, params);
   }
 
   async deletePage(id) {
@@ -153,7 +155,13 @@ export class GhostAdminClient {
       body: form
     });
 
-    return response.json();
+    const result = await parseJsonResponse(response);
+
+    if (!response.ok) {
+      throw new Error(`Ghost API error: ${response.status} - ${JSON.stringify(result)}`);
+    }
+
+    return result;
   }
 
   // Tags
@@ -225,4 +233,18 @@ function generateTokenInternal(apiKey) {
 
 export function createClient(domain, apiKey, options = {}) {
   return new GhostAdminClient(domain, apiKey, options);
+}
+
+export async function parseJsonResponse(response) {
+  const text = await response.text();
+
+  if (!text) {
+    return {};
+  }
+
+  try {
+    return JSON.parse(text);
+  } catch {
+    return { raw: text };
+  }
 }

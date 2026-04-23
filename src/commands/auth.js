@@ -31,10 +31,11 @@ authCommand
       const config = {
         apiKey: options.key,
         domain: options.domain.replace(/\/$/, ''),
+        authenticated: true,
         authenticatedAt: new Date().toISOString()
       };
 
-      fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
+      fs.writeFileSync(configPath, JSON.stringify(config, null, 2), { mode: 0o600 });
 
       spinner.succeed('Authenticated successfully!');
       console.log(`Config saved to: ${configPath}`);
@@ -67,10 +68,14 @@ export const statusCommand = new Command('status')
 
     if (fs.existsSync(configPath)) {
       const config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
-      console.log('Authenticated:', config.authenticated ? 'Yes' : 'No');
+      console.log('Authenticated:', isAuthenticatedConfig(config) ? 'Yes' : 'No');
       console.log('Domain:', config.domain);
       console.log('Authenticated at:', config.authenticatedAt);
     } else {
       console.log('Not authenticated');
     }
   });
+
+function isAuthenticatedConfig(config = {}) {
+  return Boolean(config.authenticated || config.authenticatedAt);
+}

@@ -261,20 +261,8 @@ postsCommand
     const spinner = ora('Duplicating post...').start();
 
     try {
-      const source = await resolvePostOrThrow(client, id);
-
-      const dup = {
-        title: `${source.title} (Copy)`,
-        slug: `${source.slug}-copy`,
-        status: 'draft',
-        mobiledoc: source.mobiledoc,
-        feature_image: source.feature_image,
-        custom_excerpt: source.custom_excerpt,
-        meta_title: source.meta_title,
-        meta_description: source.meta_description
-      };
-
-      const result = await client.createPost(dup);
+      const resolvedId = await resolvePostId(id, client);
+      const result = await client.copyPost(resolvedId);
       spinner.succeed('Post duplicated successfully');
       console.log(JSON.stringify(result, null, 2));
     } catch (error) {

@@ -76,7 +76,7 @@ pagesCommand
         pageData.slug = options.slug;
       }
 
-      const result = await client.createPage(pageData);
+      const result = await client.createPage(pageData, getPageWriteParams(options));
       spinner.succeed();
       console.log(JSON.stringify(result, null, 2));
     } catch (error) {
@@ -102,7 +102,7 @@ pagesCommand
       if (options.slug) pageData.slug = options.slug;
 
       const resolvedId = await resolvePageId(id, client);
-      const result = await client.updatePage(resolvedId, pageData);
+      const result = await client.updatePage(resolvedId, pageData, getPageWriteParams(options));
       spinner.succeed();
       console.log(JSON.stringify(result, null, 2));
     } catch (error) {
@@ -158,6 +158,10 @@ function looksLikeUuid(id) {
 
 function looksLikeGhostId(id) {
   return GHOST_ID_REGEX.test(id);
+}
+
+function getPageWriteParams(options) {
+  return options.content ? { source: 'html' } : {};
 }
 
 async function resolvePageId(id, client) {

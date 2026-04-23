@@ -4,7 +4,7 @@ A CLI tool and AI Agent Skill for managing [Ghost](https://ghost.org) — the op
 
 **Package name:** `ghost-admin-cli`
 
-[中文文档](doc/README.zh.md)
+[中文文档](docs/README.zh.md)
 
 ## Quick Start
 
